@@ -1,10 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import Nav from './Nav.jsx';
+import Messages from './Messages.jsx';
+import ChatBar from './ChatBar.jsx'
 
 class App extends Component {
   render() {
     return (
-      <h1>Hello React :)</h1>
-    );
+    <section>
+      <Nav />
+      <Messages />
+      <ChatBar />
+    </section>
+    )
   }
 }
 export default App;
