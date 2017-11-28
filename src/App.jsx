@@ -21,28 +21,45 @@ class App extends Component {
         }
       ]
     }
+    this.sendMessage = this.sendMessage.bind(this);
+    this.changeUsername = this.changeUsername.bind(this);
+  }
+  sendMessage(content){
+    const message = (typeof content === 'object') ? content :
+      {
+        id: this.state.messages.length + 1,
+        username: this.state.currentUser.name || 'Anonymous',
+        content
+      };
+    // returns a new array with the message
+    const messages = this.state.messages.concat(message);
+    this.setState({ messages });
+  }
+  changeUsername(event){
+    const name = event.target.value;
+    this.setState({
+      currentUser: {name}
+    });
+  }
+  // after mounting (read: rendering)
+  componentDidMount() {
+    setTimeout(() => {
+      const newMessage = {id: this.state.messages.length + 1, username: 'Michelle', content: 'Hello there!'};
+      this.sendMessage(newMessage);
+    }, 3000);
   }
   render() {
     return (
     <section>
       <Nav />
-      <Messages messages={ this.state.messages }/>
-      <ChatBar currentUser = { this.state.currentUser }/>
+      <Messages messages={ this.state.messages } />
+      <ChatBar
+        currentUser={this.state.currentUser.name}
+        changeUsername={ this.changeUsername }
+        sendMessage={ this.sendMessage }
+      />
     </section>
     )
-  }
-  // after mounting
-  componentDidMount() {
-    console.log('componentDidMount <App />');
-    setTimeout(() => {
-      console.log('Simulating incoming message');
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
-      const messages = this.state.messages.concat(newMessage); // concat used because we can't directly change the state once it's been set.
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages});
-    }, 3000);
   }
 }
 export default App;
