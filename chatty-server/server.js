@@ -7,12 +7,17 @@ const server = express()
               .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 const wss = new WebSocket.Server({ server });
+const clients = [];
 
 wss.on('connection', (socket) => {
-  console.log('Client connected');
-
+  console.log('Client connected');+
+  clients.push(socket);
   socket.on('message', (msg) => {
-    console.log(msg);
+    for(let client of clients){
+      if(client.readyState === 1){
+        client.send(msg);
+      }
+    }
   });
 
   socket.on('close', () => console.log('Client disconnected'));
