@@ -15,6 +15,7 @@ class App extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
   }
+
   // Handles sending a message to the server
   sendMessage(content){
     const message = (typeof content === 'object') ? content :
@@ -25,6 +26,7 @@ class App extends Component {
       };
     this.socket.send(JSON.stringify(message));
   }
+
   // handles changing the username
   changeUsername(event){
     const name = event.target.value;
@@ -32,6 +34,7 @@ class App extends Component {
       currentUser: {name}
     });
   }
+  
   // after mounting (read: rendering)
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:8000');
@@ -41,7 +44,7 @@ class App extends Component {
       this.setState({ messages });
     });
   }
-  
+
   render() {
     return (
     <section>
