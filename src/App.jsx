@@ -21,9 +21,11 @@ class App extends Component {
         }
       ]
     }
+    this.socket = null;
     this.sendMessage = this.sendMessage.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
   }
+  // Handles sending a message
   sendMessage(content){
     const message = (typeof content === 'object') ? content :
       {
@@ -33,8 +35,10 @@ class App extends Component {
       };
     // returns a new array with the message
     const messages = this.state.messages.concat(message);
+    this.socket.send(message.content);
     this.setState({ messages });
   }
+  // handles changing the username
   changeUsername(event){
     const name = event.target.value;
     this.setState({
@@ -43,10 +47,7 @@ class App extends Component {
   }
   // after mounting (read: rendering)
   componentDidMount() {
-    setTimeout(() => {
-      const newMessage = {id: this.state.messages.length + 1, username: 'Michelle', content: 'Hello there!'};
-      this.sendMessage(newMessage);
-    }, 3000);
+    this.socket = new WebSocket('ws://localhost:8000');
   }
   render() {
     return (

@@ -1,6 +1,6 @@
 const express = require('express');
 const WebSocket = require('ws');
-const PORT = 8081;
+const PORT = 8000;
 
 const server = express()
               .use(express.static('public'))
@@ -8,7 +8,12 @@ const server = express()
 
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', (ws) => {
+wss.on('connection', (socket) => {
   console.log('Client connected');
-  ws.on('close', () => console.log('Client disconnected'));
+
+  socket.on('message', (msg) => {
+    console.log(msg);
+  });
+
+  socket.on('close', () => console.log('Client disconnected'));
 });
