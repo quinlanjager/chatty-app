@@ -6,7 +6,8 @@ class ChatBar extends Component {
     this.handleMessageSending = this.handleMessageSending.bind(this);
   }
 
-  handleEnterPress(event){
+  // checks for enter press and blurs the element. Then focuses next sibiling.
+  makeBlur(event){
     if(event.key === 'Enter'){
       event.target.blur();
       event.target.nextSibling.focus();
@@ -26,7 +27,7 @@ class ChatBar extends Component {
   render () {
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" onKeyPress={ this.handleEnterPress } onBlur={ this.props.changeUsername } defaultValue={ this.props.currentUser } />
+        <input className="chatbar-username" placeholder="Your Name (Optional)" onKeyPress={ this.makeBlur } onBlur={ this.props.changeUsername } defaultValue={ this.props.currentUser } />
         <input className="chatbar-message" placeholder="Type a message and hit ENTER" onChange={ this.handleChangeContent } onKeyPress={ this.handleMessageSending }/>
       </footer>
     );
