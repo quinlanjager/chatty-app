@@ -8,23 +8,17 @@ const server = express()
               .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 const wss = new WebSocket.Server({ server });
-const clients = {};
 
-const broadcast_message = (msg) => {
-  for(const client in clients){
-    const curClient = clients[client];
-    if(curClient.readyState === 1){
+// handles broadcasting the message.
+wss.broadcast_message = (msg) => {
+  for(const client in wss.clients){
+    const curClient = wss.clients[client];
+    if(curClient.readyState === WebSocket.OPEN){
       curClient.send(msg);
     }
   }
 }
 
 wss.on('connection', (socket) => {
-  const socketUuid = uuidv1();
-  clients[socketUuid] = socket;
-  socket.on('message', broadcast_message);
-  // Remove clients once they've disconnected
-  socket.on('close', () => {
-    delete clients[socketUuid];
-  });
+  socket.on('message', wss.broadcast_message);
 });

@@ -34,10 +34,11 @@ class App extends Component {
       currentUser: {name}
     });
   }
-  
+
   // after mounting (read: rendering)
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:8000');
+    // handle incoming messages
     this.socket.addEventListener('message', (event) => {
       const { data } = event;
       const messages = this.state.messages.concat(JSON.parse(data));
