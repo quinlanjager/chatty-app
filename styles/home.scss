@@ -46,25 +46,25 @@ body {
   padding: 5px;
 }
 
-.message.system {
-  font-style: italic;
-  padding: 5px 20px;
-}
-
 .message-content,
-.message-username {
+.message-username,
+.message-system {
   overflow: hidden;
   margin: 5px;
   padding: 0 10px;
 }
 
 .message-content {
-  flex: 8;
+  flex: 28;
 }
 
 .message-username {
   flex: 2;
   font-weight: 700;
+}
+
+.message-system{
+  font-style: italic;
 }
 
 .navbar {
@@ -88,4 +88,9 @@ body {
   line-height: 60px;
   padding: 0 10px;
   text-decoration: none;
+}
+
+.navbar-users-online{
+  float: right;
+  font-weight: bold;
 }

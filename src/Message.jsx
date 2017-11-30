@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 
 class Message extends Component {
   render(){
+    const { type, style } = this.props;
     return (
+      // Check if it is a user message.
       <div className="message">
-        <span className="message-username">{ this.props.username }</span>
-        <span className="message-content">{ this.props.content }</span>
+        { type === 'message-content'
+        && <span className="message-username" style={style}>{ this.props.username }</span>}
+        <span className={type}>{ this.props.content }</span>
       </div>
     );
   }
