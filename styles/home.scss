@@ -48,10 +48,15 @@ body {
 
 .message-content,
 .message-username,
-.message-system {
+.message-system,
+.message-image {
   overflow: hidden;
   margin: 5px;
   padding: 0 10px;
+}
+.message-image{
+  align-self: flex-start;
+  max-width: 60%;
 }
 
 .message-content {
@@ -59,7 +64,6 @@ body {
 }
 
 .message-username {
-  flex: 2;
   font-weight: 700;
 }
 

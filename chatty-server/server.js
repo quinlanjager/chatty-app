@@ -1,6 +1,10 @@
+require('dotenv').config()
+const giphyAPI = process.env.GIPHY_API_KEY;
 const express = require('express');
 const WebSocket = require('ws');
 const uuidv1 = require('uuid/v1');
+const http = require('http');
+const querystring = require('querystring');
 const PORT = 8000;
 
 const server = express()
@@ -43,10 +47,31 @@ wss.send_user_id = (socket, id) => {
 }
 wss.user_styles = {};
 
+// saves user to 'database'
 wss.save_user = (userId) => {
   const colors = ['blue', 'yellow', 'grey', 'tomato'];
   const userColor = colors[Math.floor(Math.random()*colors.length)];
   wss.user_styles[userId] = {color:userColor};
+}
+
+// gets a random giphy image based on a query
+wss.get_giphy = (parsedMessage) => {
+  const giphySearchArr = parsedMessage.content.split(' ');
+  giphySearchArr.shift();
+  const giphySearch = giphySearchArr.join(' ');
+
+  http.get(`http://api.giphy.com/v1/gifs/random?api_key=${giphyAPI}&tag=${querystring.escape(giphySearch)}`, res => {
+    let gifObj = '';
+    res.on('data', chunk => {
+      gifObj += chunk;
+    });
+    res.on('end', () => {
+      parsedMessage.content = JSON.parse(gifObj).data.image_url
+      console.log(JSON.parse(gifObj));
+      parsedMessage.file = true;
+      wss.broadcast_message(JSON.stringify(parsedMessage));
+    })
+  });
 }
 
 
@@ -66,11 +91,27 @@ wss.on('connection', (socket) => {
         wss.user_styles[userId] = {color:'#158202', fontSize:'1.2em'};
       }
     }
+
     if(parsedMessage.type === 'MESSAGE'){
+      // assigning user styling to message
       parsedMessage.style = wss.user_styles[userId];
+      const reImage = /^[\w\:\/\.\@]+\.(jpg|gif|png)$/;
+      const reGiphy = /^\/giphy/;
+
+      // check if image link sent
+      if(reImage.test(parsedMessage.content)){
+        parsedMessage.file = true;
+      }
+
+      // handle giphy
+      if(reGiphy.test(parsedMessage.content)){
+        wss.get_giphy(parsedMessage);
+        return;
+      }
     }
-    wss.broadcast_message(JSON.stringify(parsedMessage));
+    wss.broadcast_message(JSON.stringify(parsedMessage))
   });
+
   socket.on('close', () => {
     wss.tally_users(wss.clients.size);
     delete wss.user_styles[userId];

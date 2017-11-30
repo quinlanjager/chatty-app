@@ -9,7 +9,6 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: 'Bob', id: null}, // optional. if currentUser is not defined, it means the user is Anonymous
-      usersOnline: {},
       messages: [],
       usersOnline: 0,
     }
@@ -43,9 +42,8 @@ class App extends Component {
   changeUsername(event){
     const name = event.target.value;
     const content = `${this.state.currentUser.name} has changed their name to ${name}`
-    this.setState({
-      currentUser: {name, id: this.state.currentUser.id}
-    }, () => {
+    this.setState({currentUser: {name, id: this.state.currentUser.id}}, () => {
+      // send notification to server after state has updated.
       this.postNotification(content);
     });
   }

@@ -11,6 +11,7 @@ class Messages extends Component {
         username={ message.username }
         content={ message.content }
         type={type}
+        file={message.file}
         style={message.style}
       />);
     });
