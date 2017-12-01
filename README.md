@@ -1,41 +1,34 @@
-React Boilerplate
+Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+A minimal chat room application with some treats.
+
+### Images of the App
+
+
 
 ### Usage
 
-Clone the boilerplate and create your own git repo.
+1. Clone or download the app
+2. Run `npm install` in the directory containing the project as well as /chatty-server
+3. Start the chatty server using `node server.js`
+4. Start the client server using `npm start` in the directory containing chatty app.
+5. open (http://0.0.0.0:8080)[http://0.0.0.0:8080]
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+### Functionality
 
-Install the dependencies and start the server.
+Chatty App makes use of web sockets to let users chat with each other in _real time_. Each user may select a user name for themselves or remain anonymous. The app also includes extra features to enhance the conversation, as follows:
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+* Images can be sent by simply including the image link in it's own message.
+* To send a random GIF from Giphy, write `/giphy [text]`. You must have a giphy API key if you're running the chatty server locally (see below)
+* To become the **HULK** set your user name to `HULK`.
 
-### Static Files
+#### To use /giphy locally
 
-You can store static files like images, fonts, etc in the `build` folder.
+1. Create an app with [Giphy](https://developers.giphy.com/dashboard/?create=true).
+2. Create a .env file in the chatty-server/ folder.
+3. Add a new environment variable `GIPHY_API_KEY` and give it the API key as a value.
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
 
 ### Dependencies
 
@@ -43,3 +36,6 @@ npm run lint
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* Express
+* [uuid](https://github.com/kelektiv/node-uuid)
+* [ws](https://github.com/websockets/ws)
