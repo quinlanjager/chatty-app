@@ -1,36 +1,36 @@
 // @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700");
 // @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
-h1 {
-  color: tomato;
-}
+$dark-grey: #EEE;
+$brand-color: #44A3DC;
+$highlight-color: #3CE9CC;
+$accent-color: #3F80F3;
 
 body {
-  background: white;
+  background: $dark-grey;
   color: black;
   font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
-  margin: 70px 0;
+  font-size: 16px;
+  margin: 70px 0px 120px 0;
 }
 
 .chatbar {
-  background: tomato;
-  border-top: 1px solid black;
+  background: $brand-color;
   bottom: 0;
   display: flex;
   left: 0;
-  padding: 5px;
+  padding: 20px;
   position: fixed;
   right: 0;
 }
 
 .chatbar-message,
 .chatbar-username {
-  border: 1px solid black;
   display: block;
   height: 40px;
   line-height: 40px;
   margin: 5px;
-  padding: 0 9px;
+  padding: 0 10px;
+  border-radius: 8px;
 }
 
 .chatbar-message {
@@ -40,9 +40,11 @@ body {
 .chatbar-username {
   flex: 2;
 }
+.chatbar-message:focus, .chatbar-username:focus{
+  box-shadow: 0px 0px 25px 0px $accent-color;
+}
 
 .message {
-  display: flex;
   padding: 5px;
 }
 
@@ -51,8 +53,8 @@ body {
 .message-system,
 .message-image {
   overflow: hidden;
-  margin: 5px;
-  padding: 0 10px;
+  margin: 15px;
+  display: block;
 }
 .message-image{
   align-self: flex-start;
@@ -60,11 +62,16 @@ body {
 }
 
 .message-content {
-  flex: 28;
+  background-color:white;
+  border-radius: 8px;
+  padding: 2em;
+  width:30%;
+  word-wrap: break-word;
 }
 
 .message-username {
   font-weight: 700;
+  font-size: 1.8em;
 }
 
 .message-system{
@@ -72,18 +79,18 @@ body {
 }
 
 .navbar {
-  background: tomato;
-  border-bottom: 1px solid black;
+  border-top:5px solid $brand-color;
+  background: white;
   height: 60px;
   left: 0;
-  padding: 0 10px;
+  padding: 0 12px;
   position: fixed;
   right: 0;
   top: 0;
 }
 
 .navbar-brand {
-  color: inherit;
+  color: $brand-color;
   display: block;
   float: left;
   font-weight: 700;
@@ -97,4 +104,6 @@ body {
 .navbar-users-online{
   float: right;
   font-weight: bold;
+  padding: 0 20px;
+  color: $brand-color;
 }

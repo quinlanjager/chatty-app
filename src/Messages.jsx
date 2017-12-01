@@ -7,12 +7,9 @@ class Messages extends Component {
     const allMessages = this.props.messages.map((message) => {
       const type = message.type === 'NOTIFICATION' ? 'message-system' : 'message-content';
       return (<Message
-        key={ message.id }
-        username={ message.username }
-        content={ message.content }
+        key={message.id}
+        message={message}
         type={type}
-        file={message.file}
-        style={message.style}
       />);
     });
     return(

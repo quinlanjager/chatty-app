@@ -13,49 +13,43 @@ const server = express()
 
 const wss = new WebSocket.Server({ server });
 
-// handles broadcasting the message.
-wss.broadcast_message = (msg) => {
-  for(const client of wss.clients){
-    if(client.readyState === WebSocket.OPEN){
-      client.send(msg);
-    }
-  }
-}
+// holds user styles
+wss.userStyles = {};
+
 
 // sends an invidiual message
-wss.send_message = (socket, msg) => {
+wss.sendMessage = (socket, msg) => {
   socket.send(msg);
 }
 
 // tallies up users
-wss.tally_users = (usersOnline) => {
+wss.tallyUsers = (usersOnline) => {
   const message = {
     type: 'USER_TALLY',
     usersOnline
   };
   // don't need a socket here
-  wss.broadcast_message(JSON.stringify(message));
+  wss.broadcastMessage(JSON.stringify(message));
 }
 
 // Updates a user's style
-wss.send_user_id = (socket, id) => {
+wss.sendUserId = (socket, id) => {
   const message = {
     type: 'ID_ASSIGN',
     id
   }
-  wss.send_message(socket, JSON.stringify(message));
+  wss.sendMessage(socket, JSON.stringify(message));
 }
-wss.user_styles = {};
 
 // saves user to 'database'
-wss.save_user = (userId) => {
-  const colors = ['blue', 'yellow', 'grey', 'tomato'];
+wss.saveUser = (userId) => {
+  const colors = ['#E25C60', '#3C4DE9', '#44A3DC', '#3CE9CC'];
   const userColor = colors[Math.floor(Math.random()*colors.length)];
-  wss.user_styles[userId] = {color:userColor};
+  wss.userStyles[userId] = {color:userColor};
 }
 
 // gets a random giphy image based on a query
-wss.get_giphy = (parsedMessage) => {
+wss.getGiphy = (parsedMessage) => {
   const giphySearchArr = parsedMessage.content.split(' ');
   giphySearchArr.shift();
   const giphySearch = giphySearchArr.join(' ');
@@ -67,34 +61,40 @@ wss.get_giphy = (parsedMessage) => {
     });
     res.on('end', () => {
       parsedMessage.content = JSON.parse(gifObj).data.image_url
-      console.log(JSON.parse(gifObj));
       parsedMessage.file = true;
-      wss.broadcast_message(JSON.stringify(parsedMessage));
+      wss.broadcastMessage(JSON.stringify(parsedMessage));
     })
   });
 }
 
+// handles broadcasting the message.
+wss.broadcastMessage = (msg) => {
+  for(const client of wss.clients){
+    if(client.readyState === WebSocket.OPEN){
+      client.send(msg);
+    }
+  }
+}
 
 wss.on('connection', (socket) => {
   const userId = uuidv1();
-  wss.save_user(userId);
-  wss.send_user_id(socket, userId);
-  wss.tally_users(wss.clients.size);
+  // sending initial information
+  wss.saveUser(userId);
+  wss.sendUserId(socket, userId);
+  wss.tallyUsers(wss.clients.size);
 
   socket.on('message', (msg) => {
     const parsedMessage = JSON.parse(msg);
-    let color = null;
-    console.log(parsedMessage);
-    // check for easter eggs
+    // check for easter egg
     if(parsedMessage.type === 'NOTIFICATION'){
       if(parsedMessage.username === 'HULK'){
-        wss.user_styles[userId] = {color:'#158202', fontSize:'1.2em'};
+        wss.userStyles[userId] = {color:'#158202', fontSize:'3em'};
       }
     }
 
     if(parsedMessage.type === 'MESSAGE'){
       // assigning user styling to message
-      parsedMessage.style = wss.user_styles[userId];
+      parsedMessage.style = wss.userStyles[userId];
       const reImage = /^[\w\:\/\.\@]+\.(jpg|gif|png)$/;
       const reGiphy = /^\/giphy/;
 
@@ -105,15 +105,15 @@ wss.on('connection', (socket) => {
 
       // handle giphy
       if(reGiphy.test(parsedMessage.content)){
-        wss.get_giphy(parsedMessage);
+        wss.getGiphy(parsedMessage);
         return;
       }
     }
-    wss.broadcast_message(JSON.stringify(parsedMessage))
+    wss.broadcastMessage(JSON.stringify(parsedMessage))
   });
 
   socket.on('close', () => {
-    wss.tally_users(wss.clients.size);
-    delete wss.user_styles[userId];
+    wss.tallyUsers(wss.clients.size);
+    delete wss.userStyles[userId];
   })
 });
