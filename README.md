@@ -3,8 +3,6 @@ Chatty App
 
 A minimal chat room application with some treats.
 
-### Images of the App
-
 ![](docs/app_screenshot.png)
 
 ### Usage
