@@ -9,7 +9,7 @@ const PORT = 8000;
 
 const server = express()
               .use(express.static('public'))
-              .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+              .listen(PORT, '0.0.0.0', 'localhost');
 
 const wss = new WebSocket.Server({ server });
 
