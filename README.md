@@ -13,7 +13,7 @@ A minimal chat room application with some treats.
 2. Run `npm install` in the project directory as well as in /chatty-server.
 3. Start the chatty server using `node server.js`.
 4. Start the client server using `npm start` in the directory containing chatty app.
-5. open [http://0.0.0.0:8080](http://0.0.0.0:8080).
+5. Open [http://0.0.0.0:8080](http://0.0.0.0:8080).
 
 ### Functionality
 
