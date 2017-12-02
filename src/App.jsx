@@ -43,7 +43,7 @@ class App extends Component {
   // handles changing the username
   changeUsername(event){
     const name = event.target.value;
-    if(name !== this.state.currentUser.name || name !== ''){
+    if(name !== this.state.currentUser.name && name !== ''){
       const content = `${this.state.currentUser.name ? this.state.currentUser.name : 'Anonymous'} has changed their name to ${name}`
       this.setState({currentUser: {name, id: this.state.currentUser.id}}, () => {
         // send notification to server after state has updated.
