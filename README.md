@@ -3,6 +3,15 @@ Chatty App
 
 A minimal chat room application with some treats.
 
+### Functionality
+
+Chatty App makes use of web sockets to let users chat with each other in _real time_. Each user may select a user name for themselves or remain anonymous. The app also includes extra features to enhance the conversation:
+
+* Images can be sent by simply including an image link in it's own message.
+* To send a random GIF from Giphy, write `/giphy [text]`. You must have a giphy API key if you're running the chatty server locally (see below)
+* To become the **HULK** set your user name to `HULK`.
+* Users have colours randomly assigned to their names.
+
 ![](docs/app_screenshot.png)
 
 ### Usage
@@ -12,14 +21,6 @@ A minimal chat room application with some treats.
 3. Start the chatty server using `node server.js`.
 4. Start the client server using `npm start` in the directory containing chatty app.
 5. Open [http://0.0.0.0:8080](http://0.0.0.0:8080).
-
-### Functionality
-
-Chatty App makes use of web sockets to let users chat with each other in _real time_. Each user may select a user name for themselves or remain anonymous. The app also includes extra features to enhance the conversation:
-
-* Images can be sent by simply including an image link in it's own message.
-* To send a random GIF from Giphy, write `/giphy [text]`. You must have a giphy API key if you're running the chatty server locally (see below)
-* To become the **HULK** set your user name to `HULK`.
 
 #### To use /giphy locally
 
